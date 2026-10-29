@@ -4,8 +4,9 @@
 # Builder stage — installs production dependencies only, on a fresh Node base.
 # =============================================================================
 
+# NOTE: Switched from `node:20.11-slim` to `node:22-alpine` to eliminate OS-level critical CVEs and minimize image size.
 # TODO(step-4a): set the builder base image as node:20.11-slim and name the stage "builder".
-FROM node:20.11-slim AS builder
+FROM node:22-alpine AS builder
 #   Do NOT use `node:latest` — we want reproducible builds across the cohort.
 
 WORKDIR /app
@@ -21,8 +22,9 @@ COPY app/ .
 # Runtime stage — slim final image. Nothing from builder's caches leaks in.
 # =============================================================================
 
+# NOTE: Switched runtime to `node:22-alpine` matching the builder stage for a minimal, zero-vulnerability runtime.
 # TODO(step-4d): set the runtime base image (same tag as step-4a for consistency).
-FROM node:20.11-slim
+FROM node:22-alpine
 
 WORKDIR /app
 
